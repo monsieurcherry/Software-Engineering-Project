@@ -121,8 +121,8 @@ def main():
             station_to_db(r.text)
             availability_to_db(r.text)
             stations = json.loads(r.text)
-            engine.execute(station.insert(), *map(stations_fix_keys, stations))
-            
+            # engine.execute(station.insert(), *map(stations_fix_keys, stations))
+
             time.sleep(5*60) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
