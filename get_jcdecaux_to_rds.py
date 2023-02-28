@@ -36,9 +36,9 @@ def station_to_db(text):
 
     try:
         res = engine.execute("DROP TABLE IF EXISTS station")
-        res
+        # res
         res = engine.execute(sql)
-        res
+        # res
     except Exception as e:
         print(e)
     
@@ -73,9 +73,9 @@ def availability_to_db(text):
 
     try:
         res = engine.execute("DROP TABLE IF EXISTS availability")
-        res
+        # res
         res = engine.execute(sql)
-        res
+        # res
     except Exception as e:
         print(e)
         
@@ -84,7 +84,7 @@ def availability_to_db(text):
         vals = (int(station.get('number')),
                 int(station.get('available_bikes')),
                 int(station.get('available_bike_stands')),
-                int(str(station.get('last_update')[0:11])))
+                int(str(station.get('last_update'))[0:11]))
         
         engine.execute("insert into availability values(%s,%s,%s,%s)", vals)
     return
@@ -105,7 +105,7 @@ def main():
             station_to_db(r.text)
             availability_to_db(r.text)
             print("scraping in progress")
-            time.sleep(5*60) #Scrape every 5 minutes
+            time.sleep(61) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
     return
