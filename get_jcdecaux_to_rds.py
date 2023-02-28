@@ -104,7 +104,7 @@ def main():
             r = requests.get(api_query)
             station_to_db(r.text)
             availability_to_db(r.text)
-            print("scraping in progress")
+            print("Scraping is done, now waiting...")
             time.sleep(61) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
