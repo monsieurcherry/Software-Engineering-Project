@@ -94,7 +94,7 @@ def availability_to_db(text):
 
 api_key = 'a471198f1d4a279171da8f17892b64eb12c32f33'
 contract_name = 'dublin'
-api_query = 'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey=a471198f1d4a279171da8f17892b64eb12c32f33'
+api_query = f'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey={api_key}'
 
 import time
 
