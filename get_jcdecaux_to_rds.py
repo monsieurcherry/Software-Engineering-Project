@@ -36,7 +36,9 @@ def station_to_db(text):
 
     try:
         res = engine.execute("DROP TABLE IF EXISTS station")
+        res
         res = engine.execute(sql)
+        res
     except Exception as e:
         print(e)
     
@@ -71,7 +73,9 @@ def availability_to_db(text):
 
     try:
         res = engine.execute("DROP TABLE IF EXISTS availability")
+        res
         res = engine.execute(sql)
+        res
     except Exception as e:
         print(e)
         
