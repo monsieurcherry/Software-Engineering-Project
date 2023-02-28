@@ -67,7 +67,7 @@ def availability_to_db(text):
     number INTEGER,
     available_bikes INTEGER,
     available_bike_stands INTEGER,
-    last_update INTEGER
+    last_update VARCHAR(256)
     )
     """
 
@@ -84,7 +84,7 @@ def availability_to_db(text):
         vals = (int(station.get('number')),
                 int(station.get('available_bikes')),
                 int(station.get('available_bike_stands')),
-                int(str(station.get('last_update'))[0:11]))
+                (str(station.get('last_update'))[0:11]))
         
         engine.execute("insert into availability values(%s,%s,%s,%s)", vals)
     return
