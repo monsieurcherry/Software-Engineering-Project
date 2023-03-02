@@ -67,7 +67,7 @@ def availability_to_db(text):
     number INTEGER,
     available_bikes INTEGER,
     available_bike_stands INTEGER,
-    last_update VARCHAR(256)
+    last_update DATETIME
     )
     """
 
