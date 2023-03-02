@@ -4,6 +4,8 @@ from pprint import pprint
 import simplejson as json
 import requests
 from IPython.display import display
+import datetime
+
 
 URI = "dbbikes.cfjfzkae45jy.eu-west-1.rds.amazonaws.com"
 PORT="3306"
@@ -84,7 +86,7 @@ def availability_to_db(text):
         vals = (int(station.get('number')),
                 int(station.get('available_bikes')),
                 int(station.get('available_bike_stands')),
-                int(station.get('last_update')))
+                datetime.datetime.fromtimestamp(int((station.get('last_update'))[0:10])))
         
         engine.execute("insert into availability values(%s,%s,%s,%s)", vals)
     return
