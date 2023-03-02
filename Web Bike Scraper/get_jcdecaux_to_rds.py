@@ -33,11 +33,11 @@ def station_to_db(text):
     position_lat REAL,
     position_lng REAL,
     status VARCHAR(256)
-    )
+    );
     """
 
     try:
-        engine.execute("DROP TABLE IF EXISTS station")
+        engine.execute("DROP TABLE IF EXISTS station;")
         engine.execute(sql)
     except Exception as e:
         print(e)
@@ -55,7 +55,7 @@ def station_to_db(text):
                 station.get('position').get('lat'),
                 station.get('position').get('lng'),
                 station.get('status'))
-        engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
+        engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);", vals)
     return
 
 engine.execute("DROP TABLE IF EXISTS availability;")
@@ -64,8 +64,8 @@ sql = """
     number INTEGER,
     available_bikes INTEGER,
     available_bike_stands INTEGER,
-    last_update DATETIME;
-    )
+    last_update DATETIME
+    );
     """
 engine.execute(sql)
 
