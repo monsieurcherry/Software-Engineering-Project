@@ -18,7 +18,10 @@ engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD, U
 sql = """
 CREATE DATABASE IF NOT EXISTS dbbikes;
 """
-engine.execute(sql)
+
+connection = engine.connect()
+
+connection.execute(sql)
 
 def station_to_db(text):
     sql = """
@@ -37,8 +40,8 @@ def station_to_db(text):
     """
 
     try:
-        engine.execute("DROP TABLE IF EXISTS station;")
-        engine.execute(sql)
+        connection.execute("DROP TABLE IF EXISTS station;")
+        connection.execute(sql)
     except Exception as e:
         print(e)
     
@@ -55,10 +58,10 @@ def station_to_db(text):
                 station.get('position').get('lat'),
                 station.get('position').get('lng'),
                 station.get('status'))
-        engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);", vals)
+        connection.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);", vals)
     return
 
-engine.execute("DROP TABLE IF EXISTS availability;")
+connection.execute("DROP TABLE IF EXISTS availability;")
 sql = """
     CREATE TABLE IF NOT EXISTS availability(
     number INTEGER,
@@ -67,7 +70,7 @@ sql = """
     last_update DATETIME
     );
     """
-engine.execute(sql)
+connection.execute(sql)
 
 def availability_to_db(text):
     stations = json.loads(text)
@@ -77,7 +80,7 @@ def availability_to_db(text):
                 int(station.get('available_bike_stands')),
                 str(datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10])))
                 )
-        engine.execute("insert into availability values(%s,%s,%s,%s);", vals)
+        connection.execute("insert into availability values(%s,%s,%s,%s);", vals)
     return
 
 
@@ -89,10 +92,12 @@ bike_api_query = f'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiK
 def main():
     while True:
         try:
+            connection = engine.connect()
             r = requests.get(bike_api_query)
             station_to_db(r.text)
             availability_to_db(r.text)
             print("Scraping is done, now waiting...")
+            connection.close()
             time.sleep(60) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 

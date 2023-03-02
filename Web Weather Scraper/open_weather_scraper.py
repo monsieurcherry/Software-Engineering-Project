@@ -20,12 +20,15 @@ engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD, U
 sql = """
 CREATE DATABASE IF NOT EXISTS dbbikes;
 """
-engine.execute(sql)
+
+connection = engine.connect()
+
+connection.execute(sql)
 
 sql = """
 DROP TABLE IF EXISTS weather;
 """
-engine.execute(sql)
+connection.execute(sql)
 
 def weather_to_db(text):
     sql = """
@@ -39,17 +42,17 @@ def weather_to_db(text):
     )
     """
 
-    res = engine.execute(sql)
+    res = connection.execute(sql)
         
     
     weather_infos = json.loads(text)
-    vals = (datetime.datetime.fromtimestamp(int(weather_infos.get('dt'))),
+    vals = (str(datetime.datetime.fromtimestamp(int(weather_infos.get('dt')))),
             float(weather_infos.get('main').get('temp')),
             float(weather_infos.get('wind').get('speed')),
             float(weather_infos.get('main').get('pressure')),
             weather_infos.get('weather')[0].get('description'),
             weather_infos.get('clouds').get('all'))
-    engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s);", vals)
+    connection.execute("insert into weather values(%s,%s,%s,%s,%s,%s);", vals)
     return
 
 weather_api_key = 'b7d6a55bc0fff59fb0d5f7c3c1668417'
@@ -60,9 +63,11 @@ weather_api_query = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&
 def main():
     while True:
         try:
+            connection = engine.connect()
             weather_r = requests.get(weather_api_query)
             weather_to_db(weather_r.text)
             print("Weather scraping is done, now waiting...")
+            connection.close()
             time.sleep(300) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
