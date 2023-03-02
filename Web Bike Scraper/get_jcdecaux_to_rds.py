@@ -5,7 +5,7 @@ import simplejson as json
 import requests
 from IPython.display import display
 import datetime
-
+import time
 
 URI = "dbbikes.cfjfzkae45jy.eu-west-1.rds.amazonaws.com"
 PORT="3306"
@@ -37,8 +37,8 @@ def station_to_db(text):
     """
 
     try:
-        res = engine.execute("DROP TABLE IF EXISTS station")
-        res = engine.execute(sql)
+        engine.execute("DROP TABLE IF EXISTS station")
+        engine.execute(sql)
     except Exception as e:
         print(e)
     
@@ -58,15 +58,15 @@ def station_to_db(text):
         engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
     return
 
+engine.execute("DROP TABLE IF EXISTS availability;")
 sql = """
     CREATE TABLE IF NOT EXISTS availability(
     number INTEGER,
     available_bikes INTEGER,
     available_bike_stands INTEGER,
-    last_update DATETIME
+    last_update DATETIME;
     )
     """
-engine.execute("DROP TABLE IF EXISTS availability")
 engine.execute(sql)
 
 def availability_to_db(text):
@@ -77,16 +77,14 @@ def availability_to_db(text):
                 int(station.get('available_bike_stands')),
                 datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10]))
                 )
-        
-        engine.execute("insert into availability values(%s,%s,%s,%s)", vals)
+        engine.execute("insert into availability values(%s,%s,%s,%s);", vals)
     return
 
 
 bike_api_key = 'a471198f1d4a279171da8f17892b64eb12c32f33'
-contract_name = 'dublin'
 bike_api_query = f'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey={bike_api_key}'
 
-import time
+
 
 def main():
     while True:
