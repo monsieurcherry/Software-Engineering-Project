@@ -75,7 +75,7 @@ def availability_to_db(text):
         vals = (int(station.get('number')),
                 int(station.get('available_bikes')),
                 int(station.get('available_bike_stands')),
-                datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10]))
+                str(datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10])))
                 )
         engine.execute("insert into availability values(%s,%s,%s,%s);", vals)
     return
@@ -93,7 +93,7 @@ def main():
             station_to_db(r.text)
             availability_to_db(r.text)
             print("Scraping is done, now waiting...")
-            time.sleep(300) #Scrape every 5 minutes
+            time.sleep(60) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
     return
