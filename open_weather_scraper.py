@@ -68,7 +68,7 @@ def main():
             weather_to_db(weather_r.text)
             print("Weather scraping is done, now waiting...")
             connection.close()
-            time.sleep(60) #Scrape every 5 minutes
+            time.sleep(30*60) #Scrape every 30 minutes
         except:
             print("Error. Something went wrong.") 
     return

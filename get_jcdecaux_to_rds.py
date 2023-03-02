@@ -98,7 +98,7 @@ def main():
             availability_to_db(r.text)
             print("Scraping is done, now waiting...")
             connection.close()
-            time.sleep(60) #Scrape every 5 minutes
+            time.sleep(5*60) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
     return
