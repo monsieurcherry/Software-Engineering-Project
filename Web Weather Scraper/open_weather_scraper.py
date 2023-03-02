@@ -22,13 +22,14 @@ CREATE DATABASE IF NOT EXISTS dbbikes;
 """
 engine.execute(sql)
 
+
 def weather_to_db(text):
     sql = """
     CREATE TABLE IF NOT EXISTS weather (
     time DATETIME,
-    temperature INTEGER,
-    windspeed INTEGER,
-    pressure INTEGER,
+    temperature FLOAT(3,2),
+    windspeed FLOAT(4,2),
+    pressure FLOAT(4,1),
     description VARCHAR(256),
     cloudiness VARCHAR(256)
     )
@@ -39,14 +40,13 @@ def weather_to_db(text):
     
     weather_infos = json.loads(text)
     vals = (datetime.datetime.fromtimestamp(int(weather_infos.get('dt'))),
-            int(weather_infos.get('main').get('temp')),
-            weather_infos.get('wind').get('speed'),
-            int(weather_infos.get('main').get('pressure')),
-            weather_infos.get('weather').get('0').get('description'),
+            float(weather_infos.get('main').get('temp')),
+            float(weather_infos.get('wind').get('speed')),
+            float(weather_infos.get('main').get('pressure')),
+            weather_infos.get('weather')[0].get('description'),
             weather_infos.get('clouds').get('all'))
-    engine.execute("insert into station values(%s,%s,%s,%s,%s,%s)", vals)
+    engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s)", vals)
     return
-
 
 api_key = 'b7d6a55bc0fff59fb0d5f7c3c1668417'
 lat='53.35'
