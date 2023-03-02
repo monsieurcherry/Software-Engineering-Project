@@ -22,6 +22,10 @@ CREATE DATABASE IF NOT EXISTS dbbikes;
 """
 engine.execute(sql)
 
+sql = """
+DROP TABLE IF EXISTS weather
+"""
+engine.execute(sql)
 
 def weather_to_db(text):
     sql = """
@@ -48,11 +52,10 @@ def weather_to_db(text):
     engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s)", vals)
     return
 
-api_key = 'b7d6a55bc0fff59fb0d5f7c3c1668417'
+weather_api_key = 'b7d6a55bc0fff59fb0d5f7c3c1668417'
 lat='53.35'
 lon='-6.26'
-city = 'dublin'
-weather_api_query = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+weather_api_query = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={weather_api_key}&units=metric"
 
 def main():
     while True:
@@ -60,7 +63,7 @@ def main():
             weather_r = requests.get(weather_api_query)
             weather_to_db(weather_r.text)
             print("Weather scraping is done, now waiting...")
-            time.sleep(61) #Scrape every 5 minutes
+            time.sleep(300) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
     return

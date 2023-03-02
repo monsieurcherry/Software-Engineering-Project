@@ -38,9 +38,7 @@ def station_to_db(text):
 
     try:
         res = engine.execute("DROP TABLE IF EXISTS station")
-        # res
         res = engine.execute(sql)
-        # res
     except Exception as e:
         print(e)
     
@@ -60,11 +58,7 @@ def station_to_db(text):
         engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
     return
 
-
-
-
-def availability_to_db(text):
-    sql = """
+sql = """
     CREATE TABLE IF NOT EXISTS availability(
     number INTEGER,
     available_bikes INTEGER,
@@ -72,42 +66,36 @@ def availability_to_db(text):
     last_update DATETIME
     )
     """
+engine.execute("DROP TABLE IF EXISTS availability")
+engine.execute(sql)
 
-    # try:
-    #     res = engine.execute("DROP TABLE IF EXISTS availability")
-    #     # res
-    #     res = engine.execute(sql)
-    #     # res
-    # except Exception as e:
-    #     print(e)
-        
+def availability_to_db(text):
     stations = json.loads(text)
     for station in stations:
         vals = (int(station.get('number')),
                 int(station.get('available_bikes')),
                 int(station.get('available_bike_stands')),
-                datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10])))
+                datetime.datetime.fromtimestamp(int(str(station.get('last_update'))[0:10]))
+                )
         
         engine.execute("insert into availability values(%s,%s,%s,%s)", vals)
     return
 
 
-
-
-api_key = 'a471198f1d4a279171da8f17892b64eb12c32f33'
+bike_api_key = 'a471198f1d4a279171da8f17892b64eb12c32f33'
 contract_name = 'dublin'
-api_query = f'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey={api_key}'
+bike_api_query = f'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey={bike_api_key}'
 
 import time
 
 def main():
     while True:
         try:
-            r = requests.get(api_query)
+            r = requests.get(bike_api_query)
             station_to_db(r.text)
             availability_to_db(r.text)
             print("Scraping is done, now waiting...")
-            time.sleep(61) #Scrape every 5 minutes
+            time.sleep(300) #Scrape every 5 minutes
         except:
             print("Error. Something went wrong.") 
     return
