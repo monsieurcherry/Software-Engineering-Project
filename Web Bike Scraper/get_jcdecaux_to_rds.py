@@ -73,13 +73,13 @@ def availability_to_db(text):
     )
     """
 
-    try:
-        res = engine.execute("DROP TABLE IF EXISTS availability")
-        # res
-        res = engine.execute(sql)
-        # res
-    except Exception as e:
-        print(e)
+    # try:
+    #     res = engine.execute("DROP TABLE IF EXISTS availability")
+    #     # res
+    #     res = engine.execute(sql)
+    #     # res
+    # except Exception as e:
+    #     print(e)
         
     stations = json.loads(text)
     for station in stations:
