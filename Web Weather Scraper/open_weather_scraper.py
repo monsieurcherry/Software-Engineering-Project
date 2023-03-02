@@ -23,7 +23,7 @@ CREATE DATABASE IF NOT EXISTS dbbikes;
 engine.execute(sql)
 
 sql = """
-DROP TABLE IF EXISTS weather
+DROP TABLE IF EXISTS weather;
 """
 engine.execute(sql)
 
@@ -33,9 +33,9 @@ def weather_to_db(text):
     time DATETIME,
     temperature FLOAT(3,2),
     windspeed FLOAT(4,2),
-    pressure FLOAT(4,1),
+    pressure FLOAT(5,1),
     description VARCHAR(256),
-    cloudiness VARCHAR(256)
+    cloudiness VARCHAR(256);
     )
     """
 
@@ -49,7 +49,7 @@ def weather_to_db(text):
             float(weather_infos.get('main').get('pressure')),
             weather_infos.get('weather')[0].get('description'),
             weather_infos.get('clouds').get('all'))
-    engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s)", vals)
+    engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s);", vals)
     return
 
 weather_api_key = 'b7d6a55bc0fff59fb0d5f7c3c1668417'
