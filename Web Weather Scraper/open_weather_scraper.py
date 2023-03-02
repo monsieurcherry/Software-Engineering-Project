@@ -38,8 +38,8 @@ def weather_to_db(text):
     windspeed FLOAT(4,2),
     pressure FLOAT(5,1),
     description VARCHAR(256),
-    cloudiness VARCHAR(256);
-    )
+    cloudiness VARCHAR(256)
+    );
     """
 
     res = connection.execute(sql)
